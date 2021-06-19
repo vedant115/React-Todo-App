@@ -1,24 +1,64 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import { Heading, InputField, ToDoContainer, Footer } from "./comps";
+
+import "./styles.css";
 
 function App() {
+  const [toDos, setToDos] = useState([]);
+  const [pending, setPending] = useState(0);
+
+  useEffect(() => {
+    pendingTask();
+  }, [toDos]);
+
+  const newToDoItem = (inputText) => {
+    const todo = {
+      id: toDos.length,
+      text: inputText,
+      completed: false,
+    };
+    setToDos([...toDos, todo]);
+  };
+
+  const toggleToDoState = (todo) => {
+    todo.completed = todo.completed ? false : true;
+
+    setToDos([...toDos]);
+  };
+
+  const deleteToDo = (id) => {
+    const newToDos = toDos.filter((todo) => todo.id !== id);
+
+    setToDos(newToDos);
+  };
+
+  const pendingTask = () => {
+    const pendingItems = toDos.filter((todo) => todo.completed === false);
+
+    setPending(pendingItems.length);
+  };
+
+  const deleteAll = () => {
+    setToDos([]);
+  };;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Heading />
+      <div className="box">
+        <InputField newToDoItem={newToDoItem} />
+        <ToDoContainer
+          toDos={toDos}
+          toggleToDoState={toggleToDoState}
+          deleteToDo={deleteToDo}
+        />
+        <Footer 
+          pending={pending} 
+          btnState={toDos.length > 0 ? true : false} 
+          deleteAll={deleteAll}
+        />
+      </div>
+    </>
   );
 }
 
