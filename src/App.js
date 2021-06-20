@@ -17,6 +17,8 @@ function App() {
     pendingTask();
 
     localStorage.setItem("toDos", JSON.stringify(toDos));
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [toDos]);
 
   const newToDoItem = (inputText) => {
