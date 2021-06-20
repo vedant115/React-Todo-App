@@ -8,15 +8,27 @@ function App() {
   const [pending, setPending] = useState(0);
 
   useEffect(() => {
+    const localToDos = JSON.parse(localStorage.getItem("toDos"));
+
+    localToDos && setToDos(localToDos);
+  }, []);
+
+  useEffect(() => {
     pendingTask();
+
+    localStorage.setItem("toDos", JSON.stringify(toDos));
   }, [toDos]);
 
   const newToDoItem = (inputText) => {
+    const d = new Date();
+    const newId = d.getTime();
+
     const todo = {
-      id: toDos.length,
+      id: newId,
       text: inputText,
       completed: false,
     };
+
     setToDos([...toDos, todo]);
   };
 
